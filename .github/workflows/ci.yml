@@ -1,0 +1,50 @@
+name: Playwright tests
+
+on:
+  pull_request:
+  schedule:
+    - cron: '0 20 * * *' # nightly, 20:00 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      # Public demo credentials, kept out of the repo. Set them under Settings > Variables.
+      SAUCE_PASSWORD: ${{ vars.SAUCE_PASSWORD }}
+      BOOKER_USERNAME: ${{ vars.BOOKER_USERNAME }}
+      BOOKER_PASSWORD: ${{ vars.BOOKER_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run lint && npm run typecheck && npm run format:check
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - run: npx playwright install --with-deps chromium
+      - name: Smoke on pull requests
+        if: github.event_name == 'pull_request'
+        run: npm run test:smoke
+      - name: Full suite (nightly and manual)
+        if: github.event_name != 'pull_request'
+        run: npm test
+      - name: Upload report and failure artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ github.run_id }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
