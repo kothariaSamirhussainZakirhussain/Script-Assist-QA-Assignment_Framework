@@ -60,4 +60,4 @@ docs           TRIAGE, RELIABILITY, AI_USAGE
 
 `.github/workflows/ci.yml`: pull requests run lint, typecheck, format check and `@smoke`; the nightly schedule (and manual dispatch) runs the full suite. The HTML report, traces and screenshots are uploaded as artifacts, and npm and browser downloads are cached. Set `SAUCE_PASSWORD`, `BOOKER_USERNAME` and `BOOKER_PASSWORD` as repository variables.
 
-Successful run: _add link or screenshot here after the first green run._
+Successful run: [View successful GitHub Actions run](https://github.com/kothariaSamirhussainZakirhussain/Script-Assist-QA-Assignment_Framework/actions/runs/45645496774)
