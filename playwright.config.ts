@@ -5,6 +5,18 @@ const isCI = !!process.env.CI;
 const apps = selectedApps();
 const includeTriage = !process.env.APP || process.env.APP === 'saucedemo';
 
+// BROWSER=chromium (default) | firefox | webkit
+const deviceByBrowser = {
+  chromium: devices['Desktop Chrome'],
+  firefox: devices['Desktop Firefox'],
+  webkit: devices['Desktop Safari'],
+} as const;
+const browserName = (process.env.BROWSER ?? 'chromium') as keyof typeof deviceByBrowser;
+if (!(browserName in deviceByBrowser)) {
+  throw new Error(`Unknown BROWSER "${browserName}". Use chromium, firefox or webkit.`);
+}
+const browserDevice = deviceByBrowser[browserName];
+
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
@@ -30,7 +42,7 @@ export default defineConfig({
       use:
         app.kind === 'ui'
           ? {
-              ...devices['Desktop Chrome'],
+              ...browserDevice,
               baseURL: app.baseURL,
               ...(app.testIdAttribute ? { testIdAttribute: app.testIdAttribute } : {}),
             }
@@ -42,7 +54,7 @@ export default defineConfig({
             name: 'triage',
             testDir: './tests/triage',
             use: {
-              ...devices['Desktop Chrome'],
+              ...browserDevice,
               baseURL: APPS.saucedemo.baseURL,
               testIdAttribute: 'data-test',
             },
