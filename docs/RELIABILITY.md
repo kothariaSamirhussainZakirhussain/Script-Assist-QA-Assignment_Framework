@@ -4,9 +4,16 @@ Command: `npm run test:reliability` (`npx playwright test --repeat-each=5 --work
 
 ## Run result
 
-> **TODO before submitting:** this suite was written without network access, so the repeat run has
-> not been executed yet. Run the command above, then replace this block with the real result:
-> what failed or was flaky, the root cause, and what changed. Do not submit it unfilled.
+`npx playwright test --repeat-each=5 --workers=4` → **130 passed, 0 failed, 0 flaky** (26 tests × 5, 2.6 min).
+The 15 `problem_user` runs show ✘ in the list reporter because they are marked `test.fail()`; Playwright counts them as passed.
+
+**What failed or was flaky:** nothing in the repeat run. One earlier failure was environmental: the first
+run had no `.env`, so 20 tests failed with "Missing environment variable". The framework failed loudly
+as designed, and copying `.env.example` to `.env` fixed it.
+
+**Root cause / changes:** none needed after that. Stability comes from the risks listed below
+(per-test fresh contexts, per-worker auth state, unique API data with fixture cleanup, no hard waits,
+per-assertion timeouts for the slow user).
 
 ## Risks the suite is designed against
 

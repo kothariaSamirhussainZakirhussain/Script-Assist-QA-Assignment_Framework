@@ -3,19 +3,21 @@ import { BookingSchema, CreateBookingResponseSchema } from '../../../src/api/sch
 import { buildBooking } from '../../../src/data/booking';
 
 test.describe('Booking lifecycle', { tag: '@regression' }, () => {
-  test('creates a booking and returns a schema-valid response', { tag: '@smoke' }, async ({
-    api,
-  }) => {
-    const data = buildBooking();
-    const res = await api.create(data);
-    expect(res.status()).toBe(200);
-    const body = CreateBookingResponseSchema.parse(await res.json());
-    try {
-      expect(body.booking).toEqual(data);
-    } finally {
-      await api.remove(body.bookingid); // cleanup even if the assertion fails
-    }
-  });
+  test(
+    'creates a booking and returns a schema-valid response',
+    { tag: '@smoke' },
+    async ({ api }) => {
+      const data = buildBooking();
+      const res = await api.create(data);
+      expect(res.status()).toBe(200);
+      const body = CreateBookingResponseSchema.parse(await res.json());
+      try {
+        expect(body.booking).toEqual(data);
+      } finally {
+        await api.remove(body.bookingid); // cleanup even if the assertion fails
+      }
+    },
+  );
 
   test('reads a booking by id', { tag: '@smoke' }, async ({ api, booking }) => {
     const res = await api.get(booking.id);

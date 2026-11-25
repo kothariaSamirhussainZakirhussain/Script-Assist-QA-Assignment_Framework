@@ -16,15 +16,15 @@ Requires Node 18+.
 
 ## Running tests
 
-| Goal                | Command                                                             |
-| ------------------- | ------------------------------------------------------------------- |
-| Everything          | `npm test`                                                          |
-| By tag              | `npm run test:smoke` / `npm run test:regression` (or `--grep @tag`) |
-| By project          | `npm run test:ui` / `npm run test:api` / `npm run test:triage`      |
-| By app              | `APP=saucedemo npm test`, `APP=todomvc npm test`, `APP=restfulbooker npm test` |
-| By role             | Roles are set per file with `test.use({ role: 'problem_user' })`. Run one with `npx playwright test problem-user` |
-| Reliability check   | `npm run test:reliability`                                          |
-| Lint / format / types | `npm run lint`, `npm run format:check`, `npm run typecheck`       |
+| Goal                  | Command                                                                                                           |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Everything            | `npm test`                                                                                                        |
+| By tag                | `npm run test:smoke` / `npm run test:regression` (or `--grep @tag`)                                               |
+| By project            | `npm run test:ui` / `npm run test:api` / `npm run test:triage`                                                    |
+| By app                | `APP=saucedemo npm test`, `APP=todomvc npm test`, `APP=restfulbooker npm test`                                    |
+| By role               | Roles are set per file with `test.use({ role: 'problem_user' })`. Run one with `npx playwright test problem-user` |
+| Reliability check     | `npm run test:reliability`                                                                                        |
+| Lint / format / types | `npm run lint`, `npm run format:check`, `npm run typecheck`                                                       |
 
 ## Structure
 

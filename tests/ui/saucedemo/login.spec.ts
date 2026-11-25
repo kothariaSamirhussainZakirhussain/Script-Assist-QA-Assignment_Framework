@@ -2,16 +2,16 @@ import { test, expect } from '../../../src/fixtures/saucedemo';
 import { env } from '../../../src/config/env';
 
 test.describe('Login and access control', { tag: '@regression' }, () => {
-  test('standard user logs in and sees the product list', { tag: '@smoke' }, async ({
-    loginPage,
-    inventoryPage,
-    page,
-  }) => {
-    await loginPage.goto();
-    await loginPage.login('standard_user', env.saucePassword);
-    await expect(page).toHaveURL(/inventory\.html/);
-    await expect(inventoryPage.items).toHaveCount(6);
-  });
+  test(
+    'standard user logs in and sees the product list',
+    { tag: '@smoke' },
+    async ({ loginPage, inventoryPage, page }) => {
+      await loginPage.goto();
+      await loginPage.login('standard_user', env.saucePassword);
+      await expect(page).toHaveURL(/inventory\.html/);
+      await expect(inventoryPage.items).toHaveCount(6);
+    },
+  );
 
   test('invalid credentials show an error and stay on the login page', async ({ loginPage }) => {
     await loginPage.goto();

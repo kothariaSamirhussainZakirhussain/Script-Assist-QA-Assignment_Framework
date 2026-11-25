@@ -20,17 +20,19 @@ test.describe('Inventory', { tag: '@regression' }, () => {
     await expect.poll(() => inventoryPage.names()).toEqual([...initialNames].sort().reverse());
   });
 
-  test('adds and removes items and keeps the cart badge in sync', { tag: '@smoke' }, async ({
-    inventoryPage,
-  }) => {
-    await inventoryPage.addToCart('sauce-labs-backpack');
-    await inventoryPage.addToCart('sauce-labs-bike-light');
-    await expect(inventoryPage.cartBadge).toHaveText('2');
+  test(
+    'adds and removes items and keeps the cart badge in sync',
+    { tag: '@smoke' },
+    async ({ inventoryPage }) => {
+      await inventoryPage.addToCart('sauce-labs-backpack');
+      await inventoryPage.addToCart('sauce-labs-bike-light');
+      await expect(inventoryPage.cartBadge).toHaveText('2');
 
-    await inventoryPage.removeFromCart('sauce-labs-backpack');
-    await expect(inventoryPage.cartBadge).toHaveText('1');
+      await inventoryPage.removeFromCart('sauce-labs-backpack');
+      await expect(inventoryPage.cartBadge).toHaveText('1');
 
-    await inventoryPage.removeFromCart('sauce-labs-bike-light');
-    await expect(inventoryPage.cartBadge).toBeHidden();
-  });
+      await inventoryPage.removeFromCart('sauce-labs-bike-light');
+      await expect(inventoryPage.cartBadge).toBeHidden();
+    },
+  );
 });
