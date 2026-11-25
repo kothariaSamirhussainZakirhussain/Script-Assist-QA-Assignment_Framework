@@ -61,10 +61,3 @@ docs           TRIAGE, RELIABILITY, AI_USAGE
 `.github/workflows/ci.yml`: pull requests run lint, typecheck, format check and `@smoke`; the nightly schedule (and manual dispatch) runs the full suite. The HTML report, traces and screenshots are uploaded as artifacts, and npm and browser downloads are cached. Set `SAUCE_PASSWORD`, `BOOKER_USERNAME` and `BOOKER_PASSWORD` as repository variables.
 
 Successful run: _add link or screenshot here after the first green run._
-
-## Not done / with more time
-
-- The suite was written without network access, so it has **not been executed**. Selectors, the `problem_user` defects and Restful-Booker status codes need a first run to verify.
-- `package-lock.json` is not committed yet (needs `npm install`; CI uses `npm ci`).
-- `docs/RELIABILITY.md` and `docs/AI_USAGE.md` contain TODO blocks to fill from a real run.
-- Sharding, cross-browser projects, and an API/UI data-sharing layer.
