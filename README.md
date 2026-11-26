@@ -16,15 +16,18 @@ Requires Node 18+.
 
 ## Running tests
 
-| Goal                  | Command                                                                                                           |
-| --------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| Everything            | `npm test`                                                                                                        |
-| By tag                | `npm run test:smoke` / `npm run test:regression` (or `--grep @tag`)                                               |
-| By project            | `npm run test:ui` / `npm run test:api` / `npm run test:triage`                                                    |
-| By app                | `APP=saucedemo npm test`, `APP=todomvc npm test`, `APP=restfulbooker npm test`                                    |
-| By role               | Roles are set per file with `test.use({ role: 'problem_user' })`. Run one with `npx playwright test problem-user` |
-| Reliability check     | `npm run test:reliability`                                                                                        |
-| Lint / format / types | `npm run lint`, `npm run format:check`, `npm run typecheck`                                                       |
+| Goal                  | Command                                                                                                                                                  |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Everything            | `npm test`                                                                                                                                               |
+| By tag                | `npm run test:smoke` / `npm run test:regression` (or `--grep @tag`)                                                                                      |
+| By project            | `npm run test:ui` / `npm run test:api` / `npm run test:triage`                                                                                           |
+| By app                | macOS/Linux: `APP=todomvc npm test`. PowerShell: `$env:APP="todomvc"; npm test` (apps: `saucedemo`, `todomvc`, `restfulbooker`)                          |
+| By browser            | macOS/Linux: `BROWSER=firefox npm run test:ui`. PowerShell: `$env:BROWSER="firefox"; npm run test:ui`. Values: `chromium` (default), `firefox`, `webkit` |
+| By role               | Roles are set per file with `test.use({ role: 'problem_user' })`. Run one with `npx playwright test problem-user`                                        |
+| Reliability check     | `npm run test:reliability`                                                                                                                               |
+| Lint / format / types | `npm run lint`, `npm run format:check`, `npm run typecheck`                                                                                              |
+
+For Firefox or WebKit, install them first: `npx playwright install firefox webkit`. In PowerShell, clear a variable after use with `Remove-Item Env:APP` or `Remove-Item Env:BROWSER`, or later runs stay filtered.
 
 ## Structure
 
@@ -38,6 +41,8 @@ tests/ui|api   specs per app, tests/triage corrected flaky spec
 docs           TRIAGE, RELIABILITY, AI_USAGE
 ```
 
+See [docs/TRIAGE.md](docs/TRIAGE.md), [docs/RELIABILITY.md](docs/RELIABILITY.md) and [docs/AI_USAGE.md](docs/AI_USAGE.md).
+
 ## Design decisions
 
 - **One Playwright project per app** (`ui-saucedemo`, `ui-todomvc`, `api-restfulbooker`), built from `src/config/apps.ts`. `APP=` filters them.
@@ -46,6 +51,7 @@ docs           TRIAGE, RELIABILITY, AI_USAGE
 - **Secrets:** nothing secret is committed; credentials are read lazily from env, so a missing value fails only where it is needed.
 - **API tests:** the `booking` fixture creates unique data and deletes it in teardown, even on failure. Responses are validated with Zod.
 - **Known defects:** `problem_user` bugs are asserted correctly and marked `test.fail()`.
+- **Browsers:** Chromium by default; `BROWSER` switches the UI projects to Firefox or WebKit.
 - **Defaults:** 30s test timeout, 5s expect, 2 retries in CI only, trace and screenshot kept on failure.
 
 ## Onboarding a third app
